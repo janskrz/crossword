@@ -1,0 +1,7 @@
+# Ignore files without extension
+*
+!*.*
+!*/
+
+!Makefile
+build/
