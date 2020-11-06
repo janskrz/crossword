@@ -1,4 +1,4 @@
-IDIR = include
+IDIR = src
 CC  = g++
 CFLAGS = -I$(IDIR) -Werror -Wall -Wextra -pedantic
 
