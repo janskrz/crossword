@@ -1,27 +1,35 @@
-IDIR = src
-CC  = g++
-CFLAGS = -I$(IDIR) -Werror -Wall -Wextra -pedantic
+CXX = g++
 
-SDIR = src
-ODIR = build
-LDIR = lib
+TARGET_DIR ?= ./bin
+TARGET_EXEC ?= generator
 
-LIBS=
+BUILD_DIR ?= ./build
+SRC_DIRS ?= ./src
+INC_DIRS ?= $(SRC_DIRS) ./lib/inih
 
-_DEPS = generator.h word.h wordprovider.h csvwordprovider.h
-DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+SRCS := $(shell find $(SRC_DIRS) -name *.cpp)
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
-_OBJ = generator.o csvwordprovider.o
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+INCS := $(shell find $(SRC_DIRS) -type d)
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
+CPPFLAGS ?= $(INC_FLAGS) -Werror -Wall -Wextra -pedantic
 
-$(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+$(TARGET_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
-generator: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+# c++ source
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	$(MKDIR_P) $(dir $@)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+
 
 .PHONY: clean
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(IDIR)/*~ 
+	$(RM) -r $(BUILD_DIR)
+
+-include $(DEPS)
+
+MKDIR_P ?= mkdir -p
