@@ -1,7 +1,3 @@
-# Ignore files without extension
-*
-!*.*
-!*/
-
-!Makefile
+bin/
 build/
+lib/*
