@@ -2,7 +2,7 @@
 #include <filesystem>
 
 #include "generator.h"
-#include "csvwordprovider.h"
+#include "wordprovider.h"
 
 #include "INIReader.h"
 
@@ -26,9 +26,10 @@ int main(__attribute__((unused)) int argc, char* argv[]) {
 
     filesystem::path wordlistloc = exec_path.parent_path()
         .append(reader.Get("wordlist", "location", "INVALID"));
-    CSVWordProvider provider(wordlistloc);
+
+    auto provider = WordProvider::create("csv", wordlistloc);
     WordList list;
-    provider.retrieve_word_list(list);
+    provider->retrieve_word_list(list);
 
 
     for (Word w : list) {
