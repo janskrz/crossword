@@ -1,0 +1,13 @@
+[wordlist]
+type = csv
+location = examplewordlist.csv
+
+[constraints]
+max_height = 60
+max_width = 60
+
+[scoring]
+word_cross_bonus = 30
+word_used_bonus = 100
+unused_height_bonus = 200
+unused_width_bonus = 200
