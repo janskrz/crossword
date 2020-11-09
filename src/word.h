@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 
-typedef struct Word {
+typedef struct Word
+{
     std::string clue;
     std::string word;
 } Word;

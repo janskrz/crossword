@@ -10,7 +10,8 @@
 
 using namespace std;
 
-int main(__attribute__((unused)) int argc, char* argv[]) {
+int main(__attribute__((unused)) int argc, char* argv[])
+{
     cout << "Starting crossword generator." << endl;
 
     filesystem::path exec_path = argv[0];
@@ -18,21 +19,23 @@ int main(__attribute__((unused)) int argc, char* argv[]) {
     cout << "Reading config file " << config_path << endl;
 
     INIReader reader(config_path);
-    if (reader.ParseError() != 0) {
+    if (reader.ParseError() != 0)
+    {
         cerr << "Could not read config file! Does file '" << config_path
-        << "' exist and is formatted correctly?" << endl;
-        return -1;
+             << "' exist and is formatted correctly?" << endl;
+        return -1u
     }
 
     filesystem::path wordlistloc = exec_path.parent_path()
-        .append(reader.Get("wordlist", "location", "INVALID"));
+                                   .append(reader.Get("wordlist", "location", "INVALID"));
 
     auto provider = WordProvider::create("csv", wordlistloc);
     WordList list;
     provider->retrieve_word_list(list);
 
 
-    for (Word w : list) {
+    for (Word w : list)
+    {
         cout << w.clue << " " << w.word << endl;
     }
 

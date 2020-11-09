@@ -5,5 +5,5 @@ class Generator
 private:
 
 public:
-    Generator();
+Generator();
 };
