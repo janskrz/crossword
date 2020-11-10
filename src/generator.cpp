@@ -23,7 +23,7 @@ int main(__attribute__((unused)) int argc, char* argv[])
     {
         cerr << "Could not read config file! Does file '" << config_path
              << "' exist and is formatted correctly?" << endl;
-        return -1u
+        return -1;
     }
 
     filesystem::path wordlistloc = exec_path.parent_path()
