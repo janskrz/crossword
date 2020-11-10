@@ -1,6 +1,7 @@
 #include <iostream>
 #include <filesystem>
 
+#include "grid.h"
 #include "generator.h"
 #include "wordprovider.h"
 
@@ -33,11 +34,14 @@ int main(__attribute__((unused)) int argc, char* argv[])
     WordList list;
     provider->retrieve_word_list(list);
 
-
     for (Word w : list)
     {
         cout << w.clue << " " << w.word << endl;
     }
+
+    grid::Grid grid(15, 15);
+    grid.place_first_word(list[2], grid::Direction::VERTICAL);
+    grid.print();
 
     return 0;
 }
