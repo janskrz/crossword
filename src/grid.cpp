@@ -32,8 +32,8 @@ bool Grid::in_bounds(Word const &word, Location const &loc) const
     gidx start_row = loc.row;
     gidx start_col = loc.column;
     // Hack to avoid branching. Assumes that vertical = 0, horizontal = 1 
-    gidx end_row = loc.row + (word.word.length() - 1) * (1 - loc.direction);
-    gidx end_col = loc.column + (word.word.length() - 1) * loc.direction;
+    gidx end_row = loc.row + (word.length - 1) * (1 - loc.direction);
+    gidx end_col = loc.column + (word.length - 1) * loc.direction;
 
     bool out_of_bounds = end_row >= m_internal_row_count;
     out_of_bounds |= start_col >= m_internal_column_count;
@@ -50,16 +50,16 @@ void Grid::place_word_unchecked(Word const &word, Location const &loc)
     switch (loc.direction)
     {
     case Direction::HORIZONTAL:
-        std::memcpy(m_grid.get() + GIDX(loc.row, loc.column), word.word.c_str(), word.word.length());
+        std::memcpy(m_grid.get() + GIDX(loc.row, loc.column), word.chars, word.length);
         m_max_row_used = std::max(m_max_row_used, loc.row);
-        m_max_column_used = std::max(m_max_column_used, loc.column + word.word.length() - 1);
+        m_max_column_used = std::max(m_max_column_used, loc.column + word.length - 1);
         break;
     case Direction::VERTICAL:
-        for (size_t i = 0; i < word.word.length(); i++)
+        for (size_t i = 0; i < word.length; i++)
         {
             m_grid[GIDX(loc.row + i, loc.column)] = word.word[i];
         }
-        m_max_row_used = std::max(m_max_row_used, loc.row + word.word.length() - 1);
+        m_max_row_used = std::max(m_max_row_used, loc.row + word.length - 1);
         m_max_column_used = std::max(m_max_column_used, loc.column);
         break;
     }
@@ -82,10 +82,10 @@ bool Grid::place_first_word(Word const &word, Direction direction)
     switch (direction)
     {
     case Direction::HORIZONTAL:
-        loc.column -= word.word.length() / 2;
+        loc.column -= word.length / 2;
         break;
     case Direction::VERTICAL:
-        loc.row -= word.word.length() / 2;
+        loc.row -= word.length / 2;
         break;
     }
 

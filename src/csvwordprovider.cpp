@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <cstdint>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -15,6 +17,15 @@ CSVWordProvider::CSVWordProvider(const string& csv_location,
 
 void CSVWordProvider::retrieve_word_list(WordList& words) const
 {
+    // WordList words may have already some entries. Thus, get the highest
+    // existing id in it first.
+    wid next_id = 0;
+    for (auto const &word : words)
+    {
+        next_id = std::max(next_id, word.id);
+    }
+    next_id++;
+
     std::ifstream csv_file(m_csv_location);
     if (!csv_file.is_open())
     {
@@ -33,10 +44,17 @@ void CSVWordProvider::retrieve_word_list(WordList& words) const
     while (std::getline(csv_file, line))
     {
         stringstream tokens(line);
-        Word new_word;
-        getline(tokens, new_word.clue, m_delim);
-        getline(tokens, new_word.word, m_delim);
+        
+        string clue;
+        string word;
+        getline(tokens, clue, m_delim);
+        getline(tokens, word, m_delim);
+        // make all characters upper case
+        std::for_each(word.begin(), word.end(), [] (char &c) {
+            c = toupper(c);
+        });
 
+        Word new_word(next_id++, clue, word);
         if (new_word.clue.empty() || new_word.word.empty())
         {
             throw runtime_error(
