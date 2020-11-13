@@ -232,17 +232,19 @@ void Grid::get_valid_placements(Word const &word, std::vector<grid::Location> &b
 void Grid::print_on_console(bool full_internal_grid) const
 {
     std::ostringstream os;
-    os << "Printing crossword grid" << std::endl << std::endl;
+
+    os << std::endl << "Printing crossword grid" << std::endl;
+    os << "Number of words placed: " << m_words.size() << std::endl;
 
     size_t start_row = full_internal_grid? 0 : m_min_row_used;
     size_t start_col = full_internal_grid? 0 : m_min_column_used;
-    size_t end_row = full_internal_grid? m_internal_row_count : m_max_row_used;
-    size_t end_col = full_internal_grid? m_internal_column_count : m_max_column_used;
+    size_t end_row = full_internal_grid? m_internal_row_count - 1 : m_max_row_used;
+    size_t end_col = full_internal_grid? m_internal_column_count - 1 : m_max_column_used;
 
-    for (auto row = start_row; row < end_row; row++)
+    for (auto row = start_row; row <= end_row; row++)
     {
         os << " ";
-        for (auto column = start_col; column < end_col; column++)
+        for (auto column = start_col; column <= end_col; column++)
         {
             os << m_grid[GIDX(row, column)];
         }
