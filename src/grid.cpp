@@ -6,6 +6,8 @@
 #include "grid.h"
 
 #define GIDX(row, col) ((row) * m_internal_column_count + col)
+#define INC_ROW(gidx) (gidx += m_internal_column_count)
+#define INC_COLUMN(gidx) (++gidx)
 
 using namespace grid;
 
@@ -47,17 +49,25 @@ bool Grid::in_bounds(Word const &word, Location const &loc) const
 
 void Grid::place_word_unchecked(Word const &word, Location const &loc)
 {
+    gidx cell = GIDX(loc.row, loc.column);
     switch (loc.direction)
     {
     case Direction::HORIZONTAL:
-        std::memcpy(m_grid.get() + GIDX(loc.row, loc.column), word.chars, word.length);
+        for (size_t i = 0; i < word.length; i++)
+        {
+            m_grid[cell] = word.word[i];
+            m_char_loc_lookup[word.word[i]].insert(cell);
+            INC_COLUMN(cell);
+        }
         m_max_row_used = std::max(m_max_row_used, loc.row);
         m_max_column_used = std::max(m_max_column_used, loc.column + word.length - 1);
         break;
     case Direction::VERTICAL:
         for (size_t i = 0; i < word.length; i++)
         {
-            m_grid[GIDX(loc.row + i, loc.column)] = word.word[i];
+            m_grid[cell] = word.word[i];
+            m_char_loc_lookup[word.word[i]].insert(cell);
+            INC_ROW(cell);
         }
         m_max_row_used = std::max(m_max_row_used, loc.row + word.length - 1);
         m_max_column_used = std::max(m_max_column_used, loc.column);

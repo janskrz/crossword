@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <utility>
 #include <vector>
+#include <map>
+#include <set>
 #include <memory>
 
 #include "word.h"
@@ -36,6 +38,8 @@ private:
 
     // words placed on the grid
     std::vector<std::pair<grid::Location, Word> > m_words;
+
+    std::map<char, std::set<gidx>> m_char_loc_lookup;
 
     // maximum number of rows/columns that can be used by valid crossword.
     // Note: m_internal_[row/column]_count may be larger to allow for flexibility
