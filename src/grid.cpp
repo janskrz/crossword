@@ -203,6 +203,32 @@ bool Grid::place_first_word(Word const &word, Direction direction)
     return place_word(word, loc);
 }
 
+void Grid::get_valid_placements(Word const &word, std::vector<grid::Location> &buffer) const
+{
+    for (auto cidx = 0; cidx < word.length; cidx++)
+    {
+        auto const &letter = word.word[cidx];
+        if (m_char_loc_lookup.count(letter) > 0)
+        {
+            for (auto const &cell : m_char_loc_lookup.at(letter))
+            {
+                gidx const row = cell / m_internal_column_count;
+                gidx const col = cell % m_internal_column_count;
+                Location loc = {row - cidx, col, Direction::VERTICAL};
+                if (is_valid_placement(word, loc))
+                {
+                    buffer.push_back(loc);
+                }
+                loc = {row, col - cidx, Direction::HORIZONTAL};
+                if (is_valid_placement(word, loc))
+                {
+                    buffer.push_back(loc);
+                }
+            }
+        }
+    }
+}
+
 void Grid::print() const
 {
     std::ostringstream os;

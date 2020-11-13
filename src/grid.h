@@ -95,6 +95,8 @@ public:
      */
     bool place_first_word(Word const &word, grid::Direction direction);
 
+    void get_valid_placements(Word const &word, std::vector<grid::Location> & buffer) const;
+
     /**
         Prints the current grid on console
      */
