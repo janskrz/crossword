@@ -50,6 +50,8 @@ void CSVWordProvider::retrieve_word_list(WordList& words) const
         getline(tokens, clue, m_delim);
         getline(tokens, word, m_delim);
         // make all characters upper case
+        clue = trim(clue);
+        word = trim(word);
         std::for_each(word.begin(), word.end(), [] (char &c) {
             c = toupper(c);
         });

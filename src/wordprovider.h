@@ -14,6 +14,11 @@ private:
 
 public:
     /**
+        Convenience function to trim leader/trailing whitespaces
+    */
+    static std::string trim(std::string const &str);
+
+    /**
        Retrieves a list of crossword words from an abstract source.
        @param wordlist The word list to which the retrieved words are appended
        to.
