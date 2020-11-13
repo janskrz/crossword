@@ -18,7 +18,7 @@ enum Direction // DO NOT CHANGE ORDER in_bounds check relies on it
     HORIZONTAL = 1
 };
 
-typedef std::uint_fast32_t gidx;
+typedef std::int_fast32_t gidx;
 typedef struct Location
 {
     gidx row;
@@ -39,7 +39,7 @@ private:
     // words placed on the grid
     std::vector<std::pair<grid::Location, Word> > m_words;
 
-    std::map<char, std::set<gidx>> m_char_loc_lookup;
+    std::map<char, std::set<gidx> > m_char_loc_lookup;
 
     // maximum number of rows/columns that can be used by valid crossword.
     // Note: m_internal_[row/column]_count may be larger to allow for flexibility

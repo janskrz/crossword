@@ -15,7 +15,7 @@ Grid::Grid(gidx max_row_count, gidx max_column_count) :
     m_internal_row_count(2 * max_row_count), m_internal_column_count(2 * max_column_count),
     m_max_row_count(max_row_count), m_max_column_count(max_column_count),
     // First word will be placed in the center of the internal grid.
-    // This is the passed row/column count, as row/column count is doubled internally 
+    // This is the passed row/column count, as row/column count is doubled internally
     // to allow flexible placements of words in all directions
     m_min_row_used(max_row_count), m_max_row_used(max_row_count),
     m_min_column_used(max_column_count), m_max_column_used(max_column_count)
@@ -33,12 +33,12 @@ bool Grid::in_bounds(Word const &word, Location const &loc) const
 {
     gidx start_row = loc.row;
     gidx start_col = loc.column;
-    // Hack to avoid branching. Assumes that vertical = 0, horizontal = 1 
+    // Hack to avoid branching. Assumes that vertical = 0, horizontal = 1
     gidx end_row = loc.row + (word.length - 1) * (1 - loc.direction);
     gidx end_col = loc.column + (word.length - 1) * loc.direction;
 
-    bool out_of_bounds = end_row >= m_internal_row_count;
-    out_of_bounds |= start_col >= m_internal_column_count;
+    bool out_of_bounds = start_row < 0 || end_row >= m_internal_row_count;
+    out_of_bounds |= start_col < 0 || end_col >= m_internal_column_count;
     out_of_bounds |= std::max(end_col, m_max_column_used) - std::min(start_col, m_min_column_used)
                      >= m_max_column_count;
     out_of_bounds |= std::max(end_row, m_max_row_used) - std::min(start_row, m_min_row_used)
@@ -53,7 +53,7 @@ void Grid::place_word_unchecked(Word const &word, Location const &loc)
     switch (loc.direction)
     {
     case Direction::HORIZONTAL:
-        for (size_t i = 0; i < word.length; i++)
+        for (auto i = 0; i < word.length; i++)
         {
             m_grid[cell] = word.word[i];
             m_char_loc_lookup[word.word[i]].insert(cell);
@@ -63,7 +63,7 @@ void Grid::place_word_unchecked(Word const &word, Location const &loc)
         m_max_column_used = std::max(m_max_column_used, loc.column + word.length - 1);
         break;
     case Direction::VERTICAL:
-        for (size_t i = 0; i < word.length; i++)
+        for (auto i = 0; i < word.length; i++)
         {
             m_grid[cell] = word.word[i];
             m_char_loc_lookup[word.word[i]].insert(cell);
@@ -111,9 +111,9 @@ void Grid::print() const
 {
     std::ostringstream os;
     os << "Printing crossword grid" << std::endl << std::endl;
-    for (size_t row = 0; row < m_internal_row_count; row++)
+    for (auto row = 0; row < m_internal_row_count; row++)
     {
-        for (size_t column = 0; column < m_internal_column_count; column++)
+        for (auto column = 0; column < m_internal_column_count; column++)
         {
             os << m_grid[GIDX(row, column)];
         }

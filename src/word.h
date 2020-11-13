@@ -14,7 +14,7 @@ typedef struct Word
     std::string const word;
 
     char const *const chars;
-    size_t const length;
+    std::int_fast16_t const length;
 
     Word(wid id_, std::string const &clue_, std::string const &word_) :
         id(id_), clue(clue_), word(word_), chars(word.c_str()), length(word_.length())
