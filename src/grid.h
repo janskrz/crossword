@@ -73,7 +73,7 @@ public:
         Place a word on grid.  Note that no validity our out-of-bounds checks
         are performed! This means that letters of crossing words will be
         overwritten by this placement. Thus, it is important to check the validity
-        of the placement with valid_placement(word, loc). Alternatively, use 
+        of the placement with valid_placement(word, loc). Alternatively, use
         place_word(word, loc), which includes the validity check.
 
         @return true if the word was placed successfully, otherwise false.
@@ -85,7 +85,7 @@ public:
         is checked with valid_placement(word, loc).
 
         @return true if the word was placed successfully, otherwise false.
-    */
+     */
     bool place_word(Word const &word, grid::Location const &loc);
 
     /**

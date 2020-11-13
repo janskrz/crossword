@@ -46,7 +46,8 @@ int main(__attribute__((unused)) int argc, char* argv[])
     {
         std::vector<grid::Location> buffer;
         grid.get_valid_placements(list[i], buffer);
-        if (buffer.size() > 0) {
+        if (buffer.size() > 0)
+        {
             grid.place_word_unchecked(list[i], buffer[0]);
         }
     }
