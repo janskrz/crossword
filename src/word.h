@@ -13,12 +13,16 @@ typedef struct Word
     std::string const clue;
     std::string const word;
 
-    char const *const chars;
     std::int_fast16_t const length;
 
     Word(wid id_, std::string const &clue_, std::string const &word_) :
-        id(id_), clue(clue_), word(word_), chars(word.c_str()), length(word_.length())
+        id(id_), clue(clue_), word(word_), length(word_.length())
     {
+    }
+
+    char const& operator[](int index) const
+    {
+        return word[index];
     }
 } Word;
 

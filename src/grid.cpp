@@ -90,13 +90,13 @@ bool Grid::is_valid_placement(Word const &word, Location const &loc) const
             {
                 // As this cell is not empty, it must be the same value as the
                 // letter of the word that we want to place here.
-                conflict |= m_grid[cell] != word.word[c];
+                conflict |= m_grid[cell] != word[c];
 
                 // If we have a valid crossing here, the next character must be free!
                 // If this is not the case, this means there is already another word
                 // placed here with the same orientation. Needed to prevent placing a
                 // word on a word with overlapping suffix/prefix. Like "testtest" on "testt"
-                conflict |= m_grid[cell] == word.word[c] && m_grid[RIGHT_CELL(cell)] != EMPTY_CHAR;
+                conflict |= m_grid[cell] == word[c] && m_grid[RIGHT_CELL(cell)] != EMPTY_CHAR;
             }
 
             INC_COLUMN(cell); // afterwards as we have to check letter 0 as well
@@ -122,13 +122,13 @@ bool Grid::is_valid_placement(Word const &word, Location const &loc) const
             {
                 // As this cell is not empty, it must be the same value as the
                 // letter of the word that we want to place here.
-                conflict |= m_grid[cell] != word.word[c];
+                conflict |= m_grid[cell] != word[c];
 
                 // If we have a valid crossing here, the next character must be free!
                 // If this is not the case, this means there is already another word
                 // placed here with the same orientation. Needed to prevent placing a
                 // word on a word with overlapping suffix/prefix. Like "testtest" on "testt"
-                conflict |= m_grid[cell] == word.word[c] && m_grid[DOWN_CELL(cell)] != EMPTY_CHAR;
+                conflict |= m_grid[cell] == word[c] && m_grid[DOWN_CELL(cell)] != EMPTY_CHAR;
             }
 
             INC_ROW(cell);
@@ -146,8 +146,8 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
     case Direction::HORIZONTAL:
         for (auto i = 0; i < word.length; i++)
         {
-            m_grid[cell] = word.word[i];
-            m_char_loc_lookup[word.word[i]].insert(cell);
+            m_grid[cell] = word[i];
+            m_char_loc_lookup[word[i]].insert(cell);
             INC_COLUMN(cell);
         }
         m_max_row_used = std::max(m_max_row_used, loc.row);
@@ -156,8 +156,8 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
     case Direction::VERTICAL:
         for (auto i = 0; i < word.length; i++)
         {
-            m_grid[cell] = word.word[i];
-            m_char_loc_lookup[word.word[i]].insert(cell);
+            m_grid[cell] = word[i];
+            m_char_loc_lookup[word[i]].insert(cell);
             INC_ROW(cell);
         }
         m_max_row_used = std::max(m_max_row_used, loc.row + word.length - 1);
@@ -207,7 +207,7 @@ void Grid::get_valid_placements(Word const &word, std::vector<grid::Location> &b
 {
     for (auto cidx = 0; cidx < word.length; cidx++)
     {
-        auto const &letter = word.word[cidx];
+        auto const &letter = word[cidx];
         if (m_char_loc_lookup.count(letter) > 0)
         {
             for (auto const &cell : m_char_loc_lookup.at(letter))
