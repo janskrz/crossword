@@ -40,7 +40,17 @@ int main(__attribute__((unused)) int argc, char* argv[])
     }
 
     grid::Grid grid(15, 15);
-    grid.place_first_word(list[2], grid::Direction::VERTICAL);
+    grid.place_first_word(list[2], grid::Direction::HORIZONTAL);
+
+    for (size_t i = 1; i < list.size(); i++)
+    {
+        std::vector<grid::Location> buffer;
+        grid.get_valid_placements(list[i], buffer);
+        if (buffer.size() > 0) {
+            grid.place_word_unchecked(list[i], buffer[0]);
+        }
+    }
+
     grid.print();
 
     return 0;
