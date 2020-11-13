@@ -63,13 +63,30 @@ public:
     bool in_bounds(Word const &word, grid::Location const &loc) const;
 
     /**
-        Place a word on grid and adds it to the m_words buffer.  Note that no
-        validity our out-of-bounds checks are performed! This means that letters
-        of crossing words will be overwritten by this placement.
-        Thus, it is vital to check beforehand if this words can be placed here
-        without destroying the grid.
+        Checks if this word placement is valid. I.e, it is not out-of-bounds
+        and does not create a conflict with any adjecent or crossing words
+        already placed on the grid.
      */
-    void place_word_unchecked(Word const &word, grid::Location const &loc);
+    bool valid_placement(Word const &word, grid::Location const &loc) const;
+
+    /**
+        Place a word on grid.  Note that no validity our out-of-bounds checks
+        are performed! This means that letters of crossing words will be
+        overwritten by this placement. Thus, it is important to check the validity
+        of the placement with valid_placement(word, loc). Alternatively, use 
+        place_word(word, loc), which includes the validity check.
+
+        @return true if the word was placed successfully, otherwise false.
+     */
+    bool place_word_unchecked(Word const &word, grid::Location const &loc);
+
+    /**
+        Places a word on the grid. Before placement, the validity of the placement
+        is checked with valid_placement(word, loc).
+
+        @return true if the word was placed successfully, otherwise false.
+    */
+    bool place_word(Word const &word, grid::Location const &loc);
 
     /**
         Place this first word in an empty grid.

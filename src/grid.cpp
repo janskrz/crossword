@@ -5,9 +5,17 @@
 
 #include "grid.h"
 
+// convenience macros for grid access at its only a 1D array internallly
 #define GIDX(row, col) ((row) * m_internal_column_count + col)
+
+// ATTENTION: These macros do not check for row/columns out-of-bounds!
 #define INC_ROW(gidx) (gidx += m_internal_column_count)
 #define INC_COLUMN(gidx) (++gidx)
+
+#define UP_CELL(gidx) (gidx - m_internal_column_count)
+#define DOWN_CELL(gidx) (gidx + m_internal_column_count)
+#define LEFT_CELL(gidx) (gidx - 1)
+#define RIGHT_CELL(gidx) (gidx + 1)
 
 using namespace grid;
 
@@ -47,7 +55,79 @@ bool Grid::in_bounds(Word const &word, Location const &loc) const
     return !out_of_bounds;
 }
 
-void Grid::place_word_unchecked(Word const &word, Location const &loc)
+bool Grid::valid_placement(Word const &word, Location const &loc) const
+{
+    if (!in_bounds(word, loc))
+        return false;
+
+
+    gidx start_row = loc.row;
+    gidx start_col = loc.column;
+    // Hack to avoid branching. Assumes that vertical = 0, horizontal = 1
+    gidx end_row = loc.row + (word.length - 1) * (1 - loc.direction);
+    gidx end_col = loc.column + (word.length - 1) * loc.direction;
+
+    gidx cell = GIDX(start_row, start_col);
+    bool conflict = false;
+    switch (loc.direction)
+    {
+    case Direction::HORIZONTAL:
+        // check cells before and after the word
+        conflict |= start_col > 0 && m_grid[LEFT_CELL(cell)] != EMPTY_CHAR;
+        conflict |= end_col + 1 < m_internal_column_count
+                    && m_grid[RIGHT_CELL(GIDX(end_row, end_col))] != EMPTY_CHAR;
+
+        for (auto c = 0; c < word.length; c++)
+        {
+            if (m_grid[cell] == EMPTY_CHAR)
+            {
+                // if this cell is empty, the one above and below musst be empty as well
+                if (start_row > 0)
+                    conflict |= m_grid[UP_CELL(cell)] != EMPTY_CHAR;
+                else if (start_row + 1 < m_internal_row_count)
+                    conflict |= m_grid[DOWN_CELL(cell)] != EMPTY_CHAR;
+            }
+            else
+            {
+                // As this cell is not empty, it must be the same value as the
+                // letter of the word that we want to place here.
+                conflict |= m_grid[cell] != word.chars[c];
+            }
+
+            INC_COLUMN(cell); // afterwards as we have to check letter 0 as well
+        }
+        break;
+    case Direction::VERTICAL:
+        // check cells above and below the word
+        conflict |= start_row < 0 && m_grid[UP_CELL(cell)] != EMPTY_CHAR;
+        conflict |= end_row + 1 < m_internal_row_count
+                    && m_grid[DOWN_CELL(GIDX(end_row, end_col))] != EMPTY_CHAR;
+
+        for (auto c = 0; c < word.length; c++)
+        {
+            if (m_grid[cell] == EMPTY_CHAR)
+            {
+                // if this cell is empty, the one left and right musst be empty as well
+                if (start_col > 0)
+                    conflict |= m_grid[LEFT_CELL(cell)] != EMPTY_CHAR;
+                else if (start_col + 1 < m_internal_column_count)
+                    conflict |= m_grid[RIGHT_CELL(cell)] != EMPTY_CHAR;
+            }
+            else
+            {
+                // As this cell is not empty, it must be the same value as the
+                // letter of the word that we want to place here.
+                conflict |= m_grid[cell] != word.chars[c];
+            }
+
+            INC_ROW(cell);
+        }
+        break;
+    }
+    return !conflict;
+}
+
+bool Grid::place_word_unchecked(Word const &word, Location const &loc)
 {
     gidx cell = GIDX(loc.row, loc.column);
     switch (loc.direction)
@@ -78,6 +158,16 @@ void Grid::place_word_unchecked(Word const &word, Location const &loc)
 
     std::pair<Location, Word> placement(loc, word);
     m_words.push_back(placement);
+
+    return true;
+}
+
+bool Grid::place_word(Word const &word, Location const &loc)
+{
+    if (!valid_placement(word, loc))
+        return false;
+    
+    return place_word_unchecked(word, loc);
 }
 
 bool Grid::place_first_word(Word const &word, Direction direction)
@@ -99,12 +189,7 @@ bool Grid::place_first_word(Word const &word, Direction direction)
         break;
     }
 
-    if (!in_bounds(word, loc))
-    {
-        return false;
-    }
-    place_word_unchecked(word, loc);
-    return true;
+    return place_word(word, loc);
 }
 
 void Grid::print() const
