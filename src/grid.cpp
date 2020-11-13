@@ -84,14 +84,20 @@ bool Grid::valid_placement(Word const &word, Location const &loc) const
                 // if this cell is empty, the one above and below musst be empty as well
                 if (start_row > 0)
                     conflict |= m_grid[UP_CELL(cell)] != EMPTY_CHAR;
-                else if (start_row + 1 < m_internal_row_count)
+                if (start_row + 1 < m_internal_row_count)
                     conflict |= m_grid[DOWN_CELL(cell)] != EMPTY_CHAR;
             }
             else
             {
                 // As this cell is not empty, it must be the same value as the
                 // letter of the word that we want to place here.
-                conflict |= m_grid[cell] != word.chars[c];
+                conflict |= m_grid[cell] != word.word[c];
+
+                // If we have a valid crossing here, the next character must be free!
+                // If this is not the case, this means there is already another word
+                // placed here with the same orientation. Needed to prevent placing a
+                // word on a word with overlapping suffix/prefix. Like "testtest" on "testt"
+                conflict |= m_grid[cell] == word.word[c] && m_grid[RIGHT_CELL(cell)] != EMPTY_CHAR;
             }
 
             INC_COLUMN(cell); // afterwards as we have to check letter 0 as well
@@ -110,14 +116,20 @@ bool Grid::valid_placement(Word const &word, Location const &loc) const
                 // if this cell is empty, the one left and right musst be empty as well
                 if (start_col > 0)
                     conflict |= m_grid[LEFT_CELL(cell)] != EMPTY_CHAR;
-                else if (start_col + 1 < m_internal_column_count)
+                if (start_col + 1 < m_internal_column_count)
                     conflict |= m_grid[RIGHT_CELL(cell)] != EMPTY_CHAR;
             }
             else
             {
                 // As this cell is not empty, it must be the same value as the
                 // letter of the word that we want to place here.
-                conflict |= m_grid[cell] != word.chars[c];
+                conflict |= m_grid[cell] != word.word[c];
+
+                // If we have a valid crossing here, the next character must be free!
+                // If this is not the case, this means there is already another word
+                // placed here with the same orientation. Needed to prevent placing a
+                // word on a word with overlapping suffix/prefix. Like "testtest" on "testt"
+                conflict |= m_grid[cell] == word.word[c] && m_grid[DOWN_CELL(cell)] != EMPTY_CHAR;
             }
 
             INC_ROW(cell);
