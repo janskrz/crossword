@@ -104,7 +104,7 @@ bool Grid::is_valid_placement(Word const &word, Location const &loc) const
         break;
     case Direction::VERTICAL:
         // check cells above and below the word
-        conflict |= start_row < 0 && m_grid[UP_CELL(cell)] != EMPTY_CHAR;
+        conflict |= start_row > 0 && m_grid[UP_CELL(cell)] != EMPTY_CHAR;
         conflict |= end_row + 1 < m_internal_row_count
                     && m_grid[DOWN_CELL(GIDX(end_row, end_col))] != EMPTY_CHAR;
 
