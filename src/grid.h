@@ -98,9 +98,12 @@ public:
     void get_valid_placements(Word const &word, std::vector<grid::Location> & buffer) const;
 
     /**
-        Prints the current grid on console
+        Prints the current grid on console.
+        If paramter full_internal_grid is false, only the actually needed subsection
+        of the internal grid is printed. Otherwise the full grid is printed, including
+        empty rows and columns.
      */
-    void print() const;
+    void print_on_console(bool full_internal_grid = false) const;
 };
 
 } //namespace grid

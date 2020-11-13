@@ -52,7 +52,7 @@ int main(__attribute__((unused)) int argc, char* argv[])
         }
     }
 
-    grid.print();
+    grid.print_on_console();
 
     return 0;
 }
