@@ -37,7 +37,7 @@ Grid::Grid(gidx max_row_count, gidx max_column_count) :
     std::fill(m_grid.get(), m_grid.get() + gridsize, EMPTY_CHAR);
 }
 
-bool Grid::in_bounds(Word const &word, Location const &loc) const
+bool Grid::is_in_bounds(Word const &word, Location const &loc) const
 {
     gidx start_row = loc.row;
     gidx start_col = loc.column;
@@ -55,11 +55,10 @@ bool Grid::in_bounds(Word const &word, Location const &loc) const
     return !out_of_bounds;
 }
 
-bool Grid::valid_placement(Word const &word, Location const &loc) const
+bool Grid::is_valid_placement(Word const &word, Location const &loc) const
 {
-    if (!in_bounds(word, loc))
+    if (!is_in_bounds(word, loc))
         return false;
-
 
     gidx start_row = loc.row;
     gidx start_col = loc.column;
@@ -176,9 +175,9 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
 
 bool Grid::place_word(Word const &word, Location const &loc)
 {
-    if (!valid_placement(word, loc))
+    if (!is_valid_placement(word, loc))
         return false;
-    
+
     return place_word_unchecked(word, loc);
 }
 

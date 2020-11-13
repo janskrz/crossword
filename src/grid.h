@@ -60,14 +60,14 @@ public:
         Checks if the word 'word' can be placed at location 'loc' without running
         out-of-bounds and violating the size constraints of the grid.
      */
-    bool in_bounds(Word const &word, grid::Location const &loc) const;
+    bool is_in_bounds(Word const &word, grid::Location const &loc) const;
 
     /**
         Checks if this word placement is valid. I.e, it is not out-of-bounds
         and does not create a conflict with any adjecent or crossing words
         already placed on the grid.
      */
-    bool valid_placement(Word const &word, grid::Location const &loc) const;
+    bool is_valid_placement(Word const &word, grid::Location const &loc) const;
 
     /**
         Place a word on grid.  Note that no validity our out-of-bounds checks
