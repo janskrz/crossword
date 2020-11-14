@@ -34,7 +34,8 @@ score SimpleScorer::score_grid(grid::Grid const &grid,
     score result = m_base_score - m_missing_word_penalty * unplaced_word_count;
     result += grid.get_word_crossing_count() * m_word_crossing_bonus;
     result += grid.get_placed_word_count() * m_placed_word_bonus;
-    result += grid.get_placed_letter_count() * m_placed_letter_bonus;
+    // a crossing has the same letter of two words. This is not included in get_placed_letter_count
+    result += (grid.get_word_crossing_count() + grid.get_placed_letter_count()) * m_placed_letter_bonus;
     result -= grid.get_width() * m_used_column_penalty;
     result -= grid.get_height() * m_used_row_penalty;
 
