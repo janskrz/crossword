@@ -15,7 +15,7 @@ private:
 public:
     /**
         Convenience function to trim leader/trailing whitespaces
-    */
+     */
     static std::string trim(std::string const &str);
 
     /**
