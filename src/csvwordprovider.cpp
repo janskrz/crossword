@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdint>
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -13,6 +14,8 @@ CSVWordProvider::CSVWordProvider(const string& csv_location,
                                  bool ignore_header, char delim) :
     m_csv_location(csv_location), m_ignore_header(ignore_header), m_delim(delim)
 {
+    std::cout << "Initialized CSV word list provider. " 
+      << "CSV location: " << csv_location << std::endl;
 }
 
 void CSVWordProvider::retrieve_word_list(WordList& words) const

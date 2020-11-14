@@ -6,9 +6,9 @@
 using namespace scoring;
 
 SimpleScorer::SimpleScorer(INIReader const &config) :
-    m_base_score(config.GetInteger("scoring", "m_base_score", 0)),
-    m_placed_word_bonus(config.GetInteger("scoring", "m_placed_word_bonus", 0)),
-    m_placed_letter_bonus(config.GetInteger("scoring", "m_placed_letter_bonus", 0)),
+    m_base_score(config.GetInteger("scoring", "base_score", 0)),
+    m_placed_word_bonus(config.GetInteger("scoring", "placed_word_bonus", 0)),
+    m_placed_letter_bonus(config.GetInteger("scoring", "placed_letter_bonus", 0)),
     m_word_crossing_bonus(config.GetInteger("scoring", "word_crossing_bonus", 0)),
     m_missing_word_penalty(config.GetInteger("scoring", "missing_word_penalty", 0)),
     m_used_row_penalty(config.GetInteger("scoring", "used_row_penalty", 0)),
@@ -16,7 +16,7 @@ SimpleScorer::SimpleScorer(INIReader const &config) :
 {
     std::ostringstream os;
 
-    os << "Initialized simple scoring with the following parameters" << std::endl;
+    os << "Initialized simple scorer with the following parameters" << std::endl;
     os << "base_score = " << m_base_score << std::endl;
     os << "placed_word_bonus = " << m_placed_word_bonus << std::endl;
     os << "placed_letter_bonus = " << m_placed_letter_bonus << std::endl;

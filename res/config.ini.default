@@ -15,5 +15,5 @@ placed_word_bonus = 100
 placed_letter_bonus = 10
 word_crossing_bonus = 30
 missing_word_penalty = 100000
-used_row_penaly = 1000
-used_column_penaly = 1000
+used_row_penalty = 1000
+used_column_penalty = 1000
