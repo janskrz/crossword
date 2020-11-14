@@ -1,11 +1,11 @@
 #include <iostream>
 #include <sstream>
 
-#include "simplescoring.h"
+#include "simplescorer.h"
 
 using namespace scoring;
 
-SimpleScoring::SimpleScoring(INIReader const &config) :
+SimpleScorer::SimpleScorer(INIReader const &config) :
     m_base_score(config.GetInteger("scoring", "m_base_score", 0)),
     m_placed_word_bonus(config.GetInteger("scoring", "m_placed_word_bonus", 0)),
     m_placed_letter_bonus(config.GetInteger("scoring", "m_placed_letter_bonus", 0)),
@@ -28,7 +28,7 @@ SimpleScoring::SimpleScoring(INIReader const &config) :
     std::cout << os.str() << std::endl;
 }
 
-score SimpleScoring::score_grid(grid::Grid const &grid,
+score SimpleScorer::score_grid(grid::Grid const &grid,
                                 std::int_fast32_t unplaced_word_count) const
 {
     score result = m_base_score - m_missing_word_penalty * unplaced_word_count;

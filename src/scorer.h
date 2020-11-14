@@ -12,10 +12,10 @@ namespace scoring {
 
 typedef std::int_fast32_t score;
 
-class Scoring
+class Scorer
 {
 public:
-    static std::unique_ptr<Scoring> create(std::string const &type, INIReader const &config);
+    static std::unique_ptr<Scorer> create(std::string const &type, INIReader const &config);
 
     virtual score score_grid(grid::Grid const &grid,
                              std::int_fast32_t unplaced_word_count) const = 0;

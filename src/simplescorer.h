@@ -1,12 +1,12 @@
 #pragma once
 
-#include "scoring.h"
+#include "scorer.h"
 
 #include "INIReader.h"
 
 namespace scoring {
 
-class SimpleScoring : public Scoring
+class SimpleScorer : public Scorer
 {
 private:
     score const m_base_score;
@@ -18,7 +18,7 @@ private:
     score const m_used_column_penalty;
 
 public:
-    SimpleScoring(INIReader const &config);
+    SimpleScorer(INIReader const &config);
 
     score score_grid(grid::Grid const &grid,
                      std::int_fast32_t unplaced_word_count) const override;
