@@ -6,14 +6,14 @@
 
 typedef std::uint_fast16_t wid;
 
-typedef struct Word
+typedef struct Word // cannot have const members due to use of std::shuffle
 {
-    wid const id;
+    wid id;
 
-    std::string const clue;
-    std::string const word;
+    std::string clue;
+    std::string word;
 
-    std::int_fast16_t const length;
+    std::int_fast16_t length;
 
     Word(wid id_, std::string const &clue_, std::string const &word_) :
         id(id_), clue(clue_), word(word_), length(word_.length())

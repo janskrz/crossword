@@ -25,7 +25,7 @@ SimpleScorer::SimpleScorer(INIReader const &config) :
     os << "used_row_penalty = " << m_used_row_penalty << std::endl;
     os << "used_column_penalty = " << m_used_column_penalty << std::endl;
 
-    std::cout << os.str() << std::endl;
+    std::cout << os.str();
 }
 
 score SimpleScorer::score_grid(grid::Grid const &grid,
