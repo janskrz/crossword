@@ -8,7 +8,7 @@
 
 #include "INIReader.h"
 
-#define SEED_RNG (100) // TODO: something variable
+#define SEED_RNG (time(NULL)) // seed is current time in seconds
 
 #define CONFIG_FILE "config.ini"
 
@@ -19,9 +19,11 @@ Generator::Generator(std::int_fast32_t number_of_crosswords_to_generate,
     m_cw_max_width(crossword_max_width), m_cw_max_height(crossword_max_height),
     m_grid_scorer(std::move(grid_scorer))
 {
-    m_rng.seed(SEED_RNG);
+    auto rng_seed = SEED_RNG;
+    m_rng.seed(rng_seed);
     provider->retrieve_word_list(word_list);
     std::cout << "Initialized crossword generator. " << std::endl;
+    std::cout << "Random generator seed is: " << rng_seed << std::endl;
 }
 
 std::unique_ptr<grid::Grid> Generator::generate_single_grid()
