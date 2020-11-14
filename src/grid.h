@@ -38,8 +38,8 @@ private:
 
     // words placed on the grid
     std::vector<std::pair<grid::Location, Word> > m_words;
-
     std::map<char, std::set<gidx> > m_char_loc_lookup;
+    std::int_fast32_t m_crossing_count;
 
     // maximum number of rows/columns that can be used by valid crossword.
     // Note: m_internal_[row/column]_count may be larger to allow for flexibility
@@ -96,6 +96,13 @@ public:
     bool place_first_word(Word const &word, grid::Direction direction);
 
     void get_valid_placements(Word const &word, std::vector<grid::Location> & buffer) const;
+
+    // Some getter functions useful for grid scoring
+    std::int_fast32_t get_height() const;
+    std::int_fast32_t get_width() const;
+    std::int_fast32_t get_placed_letter_count() const;
+    std::int_fast32_t get_placed_word_count() const;
+    std::int_fast32_t get_word_crossing_count() const;
 
     /**
         Prints the current grid on console.

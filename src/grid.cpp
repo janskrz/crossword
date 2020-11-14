@@ -21,6 +21,7 @@ using namespace grid;
 
 Grid::Grid(gidx max_row_count, gidx max_column_count) :
     m_internal_row_count(2 * max_row_count), m_internal_column_count(2 * max_column_count),
+    m_crossing_count(0),
     m_max_row_count(max_row_count), m_max_column_count(max_column_count),
     // First word will be placed in the center of the internal grid.
     // This is the passed row/column count, as row/column count is doubled internally
@@ -146,6 +147,9 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
     case Direction::HORIZONTAL:
         for (auto i = 0; i < word.length; i++)
         {
+            if (m_grid[cell] != EMPTY_CHAR)
+                m_crossing_count++;
+
             m_grid[cell] = word[i];
             m_char_loc_lookup[word[i]].insert(cell);
             INC_COLUMN(cell);
@@ -156,6 +160,9 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
     case Direction::VERTICAL:
         for (auto i = 0; i < word.length; i++)
         {
+            if (m_grid[cell] != EMPTY_CHAR)
+                m_crossing_count++;
+
             m_grid[cell] = word[i];
             m_char_loc_lookup[word[i]].insert(cell);
             INC_ROW(cell);
@@ -229,17 +236,50 @@ void Grid::get_valid_placements(Word const &word, std::vector<grid::Location> &b
     }
 }
 
+std::int_fast32_t Grid::get_height() const
+{
+    return m_max_row_used - m_min_row_used + 1;
+}
+
+std::int_fast32_t Grid::get_width() const
+{
+    return m_max_column_used - m_min_column_used + 1;
+}
+
+std::int_fast32_t Grid::get_placed_letter_count() const
+{
+    std::int_fast32_t count = 0;
+    for (auto const &[key, char_locs] : m_char_loc_lookup)
+    {
+        count += char_locs.size();
+    }
+    return count;
+}
+
+std::int_fast32_t Grid::get_placed_word_count() const
+{
+    return m_words.size();
+}
+
+std::int_fast32_t Grid::get_word_crossing_count() const
+{
+    return m_crossing_count;
+}
+
 void Grid::print_on_console(bool full_internal_grid) const
 {
     std::ostringstream os;
 
     os << std::endl << "Printing crossword grid" << std::endl;
-    os << "Number of words placed: " << m_words.size() << std::endl;
+    os << "Grid dimensions (H,W): " << get_height() << " " << get_width() << std::endl;
+    os << "Number of words placed: " << get_placed_word_count() << std::endl;
+    os << "Number of charactes placed: " << get_placed_letter_count() << std::endl;
+    os << "Number of word crossings: " << get_word_crossing_count() << std::endl;
 
-    size_t start_row = full_internal_grid? 0 : m_min_row_used;
-    size_t start_col = full_internal_grid? 0 : m_min_column_used;
-    size_t end_row = full_internal_grid? m_internal_row_count - 1 : m_max_row_used;
-    size_t end_col = full_internal_grid? m_internal_column_count - 1 : m_max_column_used;
+    size_t start_row = full_internal_grid ? 0 : m_min_row_used;
+    size_t start_col = full_internal_grid ? 0 : m_min_column_used;
+    size_t end_row = full_internal_grid ? m_internal_row_count - 1 : m_max_row_used;
+    size_t end_col = full_internal_grid ? m_internal_column_count - 1 : m_max_column_used;
 
     for (auto row = start_row; row <= end_row; row++)
     {
