@@ -8,8 +8,11 @@ class LatexGenerator
 {
 private:
     void add_preamble(std::ofstream &) const;
-    void add_puzzle_macros(std::ofstream  &) const;
+    void add_puzzle_macros(std::ofstream &) const;
     void add_puzzle(grid::Grid const * const grid, std::ofstream &) const;
+    void add_hints(grid::Grid const * const, std::ofstream &) const;
+    void add_pagebreak(std::ofstream &) const;
+    void add_solutionmode(std::ofstream &) const;
     void add_closing(std::ofstream &) const;
 
 public:

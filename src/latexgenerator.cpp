@@ -9,11 +9,15 @@ void LatexGenerator::add_preamble(std::ofstream &of) const
 \documentclass{article}
 
 \usepackage{amssymb}
-\usepackage{relsize}
+\usepackage{multicol}
+\usepackage{enumitem}
 \usepackage[a4paper, margin=1cm]{geometry}
 \usepackage[small]{cwpuzzle}
 
+\setlist[enumerate]{itemsep=0mm}
+
 \begin{document}
+\pagestyle{empty}
 )""";
 
 }
@@ -77,15 +81,59 @@ void LatexGenerator::add_puzzle(grid::Grid const * const grid, std::ofstream &of
         }
         of << "|." << std::endl;
     }
+    of << "\\end{Puzzle}" << std::endl << std::endl;
+}
 
-    of << "\\end{Puzzle}" << std::endl;
+void LatexGenerator::add_hints(grid::Grid const * const grid, std::ofstream &of) const
+{
+    of << "\\begin{multicols*}{2}" << std::endl;
+    of << "VERTICAL CLUES" << std::endl;
+    of << "\\begin{enumerate}" << std::endl;
+    for (auto i = 0; i <= grid->get_height(); i++)
+    {
+        for (auto j = 0; j <= grid->get_width(); j++)
+        {
+            Word const *vword = grid->get_word_starting_at(i, j, grid::Direction::VERTICAL);
+            if (vword != nullptr)
+            {
+                of << "\\item " << vword->clue << std::endl;
+            }
+        }
+    }
+    of << "\\end{enumerate}" << std::endl;
+    of << "\\vfill\\null" << std::endl;
+    of << "\\columnbreak" << std::endl;
+
+    of << "HORIZONTAL CLUES" << std::endl;
+    of << "\\begin{enumerate}" << std::endl;
+    for (auto i = 0; i <= grid->get_height(); i++)
+    {
+        for (auto j = 0; j <= grid->get_width(); j++)
+        {
+            Word const *vword = grid->get_word_starting_at(i, j, grid::Direction::HORIZONTAL);
+            if (vword != nullptr)
+            {
+                of << "\\item " << vword->clue << std::endl;
+            }
+        }
+    }
+    of << "\\end{enumerate}" << std::endl;
+    of << "\\end{multicols*}" << std::endl;
+}
+
+void LatexGenerator::add_pagebreak(std::ofstream &of) const
+{
+    of << std::endl << "\\pagebreak" << std::endl;
+}
+
+void LatexGenerator::add_solutionmode(std::ofstream &of) const
+{
+    of << std::endl << "\\PuzzleSolution" << std::endl;
 }
 
 void LatexGenerator::add_closing(std::ofstream &of) const
 {
-    of << R"""(
-\end{document}
-)""";
+    of << std::endl << "\\end{document}" << std::endl;
 }
 
 void LatexGenerator::generate(grid::Grid const * const grid, std::string const &fileloc) const
@@ -95,6 +143,13 @@ void LatexGenerator::generate(grid::Grid const * const grid, std::string const &
 
     add_preamble(of);
     add_puzzle_macros(of);
+
+    add_puzzle(grid, of);
+    add_pagebreak(of);
+    add_hints(grid, of);
+
+    add_pagebreak(of);
+    add_solutionmode(of);
     add_puzzle(grid, of);
 
     add_closing(of);
