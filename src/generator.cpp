@@ -60,8 +60,8 @@ std::unique_ptr<grid::Grid> Generator::generate_single_grid()
             }
             else
             {
-                std::uniform_int_distribution<int> rand(0, valid_placements.size() - 1);
-                grid::Location rand_loc = valid_placements[dist(m_rng)];
+                std::uniform_int_distribution<int> rng(0, valid_placements.size() - 1);
+                grid::Location rand_loc = valid_placements[rng(m_rng)];
                 grid->place_word_unchecked(word, rand_loc);
                 word_placed = true;
             }
