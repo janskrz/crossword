@@ -5,15 +5,15 @@ location = examplewordlist.csv
 [constraints]
 crossword_generation_count = 1000
 max_height = 60
-max_width = 60
+max_width = 40 ; longer rows do not fit on A4 paper...
 
 [scoring]
 type = simple
 
 base_score = 10000
-placed_word_bonus = 100
-placed_letter_bonus = 10
-word_crossing_bonus = 30
+placed_word_bonus = 0
+placed_letter_bonus = 0
+word_crossing_bonus = 100
 missing_word_penalty = 100000
-used_row_penalty = 1000
-used_column_penalty = 1000
+used_row_penalty = 100
+used_column_penalty = 100
