@@ -19,7 +19,7 @@
 
 using namespace grid;
 
-char const Grid::EMPTY_CHAR = '-';
+char const Grid::EMPTY_CHAR = '.';
 
 bool Location::operator<(Location const &other) const
 {
