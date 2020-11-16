@@ -24,20 +24,21 @@ typedef struct Location
     gidx row;
     gidx column;
     grid::Direction direction;
+
+    bool operator<(Location const &other) const;
 } Location;
 
 class Grid
 {
 private:
-    static char const EMPTY_CHAR;
-
     // size of the internal grid
     gidx m_internal_row_count;
     gidx m_internal_column_count;
     std::unique_ptr<char[]> m_grid;
 
     // words placed on the grid
-    std::vector<std::pair<grid::Location, Word> > m_words;
+    std::map<grid::Location, Word> m_words;
+
     std::map<char, std::set<gidx> > m_char_loc_lookup;
     std::int_fast32_t m_crossing_count;
 
@@ -54,6 +55,8 @@ private:
     gidx m_max_column_used;
 
 public:
+    static char const EMPTY_CHAR;
+
     Grid(gidx max_row_count, gidx max_column_count);
 
     /**
@@ -97,12 +100,16 @@ public:
 
     void get_valid_placements(Word const &word, std::vector<grid::Location> & buffer) const;
 
-    // Some getter functions useful for grid scoring
+
+    // Various getter functions
     std::int_fast32_t get_height() const;
     std::int_fast32_t get_width() const;
     std::int_fast32_t get_placed_letter_count() const;
     std::int_fast32_t get_placed_word_count() const;
     std::int_fast32_t get_word_crossing_count() const;
+    char get_cell_content(gidx row, gidx column) const;
+    Word const * get_word_starting_at(gidx row, gidx column, grid::Direction dir) const;
+
 
     /**
         Prints the current grid on console.

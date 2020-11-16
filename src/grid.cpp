@@ -21,6 +21,19 @@ using namespace grid;
 
 char const Grid::EMPTY_CHAR = '-';
 
+bool Location::operator<(Location const &other) const
+{
+    if (row == other.row && column == other.column)
+    {
+        return direction < other.direction;
+    }
+    else if (row == other.row)
+    {
+        return column < other.column;
+    }
+    return row < other.row;
+}
+
 Grid::Grid(gidx max_row_count, gidx max_column_count) :
     m_internal_row_count(2 * max_row_count), m_internal_column_count(2 * max_column_count),
     m_crossing_count(0),
@@ -177,7 +190,7 @@ bool Grid::place_word_unchecked(Word const &word, Location const &loc)
     m_min_row_used = std::min(m_min_row_used, loc.row);
 
     std::pair<Location, Word> placement(loc, word);
-    m_words.push_back(placement);
+    m_words.insert(std::move(placement));
 
     return true;
 }
@@ -266,6 +279,27 @@ std::int_fast32_t Grid::get_placed_word_count() const
 std::int_fast32_t Grid::get_word_crossing_count() const
 {
     return m_crossing_count;
+}
+
+char Grid::get_cell_content(gidx row, gidx column) const
+{
+    if (row < 0 || row >= get_height() || column < 0 || column >= get_width())
+        return EMPTY_CHAR;
+
+    return m_grid[GIDX(m_min_row_used + row, m_min_column_used + column)];
+}
+
+Word const * Grid::get_word_starting_at(gidx row, gidx column, Direction dir) const
+{
+    row += m_min_row_used;
+    column += m_min_column_used;
+    Location const loc = {row, column, dir};
+
+    if (m_words.count(loc) > 0)
+    {
+        return &m_words.at(loc);
+    }
+    return nullptr;
 }
 
 void Grid::print_on_console(bool full_internal_grid) const

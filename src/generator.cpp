@@ -5,6 +5,7 @@
 #include <string>
 
 #include "generator.h"
+#include "latexgenerator.h"
 
 #include "INIReader.h"
 
@@ -169,5 +170,8 @@ int main(__attribute__((unused)) int argc, char* argv[])
 
     std::unique_ptr<grid::Grid> grid = generator.generate();
 
+    LatexGenerator to_latex;
+    to_latex.generate(grid.get(), "bin/testfile.tex");
+    
     return 0;
 }
