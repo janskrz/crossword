@@ -4,8 +4,10 @@ location = examplewordlist.csv
 
 [constraints]
 crossword_generation_count = 1000
+
+; A4 paper limitations
 max_height = 60
-max_width = 40 ; longer rows do not fit on A4 paper...
+max_width = 40
 
 [scoring]
 type = simple
