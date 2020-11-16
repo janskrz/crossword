@@ -167,35 +167,7 @@ int main(__attribute__((unused)) int argc, char* argv[])
     Generator generator(cw_gen_count, cw_max_height, cw_max_width,
                         std::move(wordprovider), std::move(scorer));
 
-    auto grid = generator.generate();
+    std::unique_ptr<grid::Grid> grid = generator.generate();
 
-    /*WordList list;
-       provider->retrieve_word_list(list);
-
-       for (Word w : list)
-       {
-        cout << w.clue << " " << w.word << endl;
-       }
-
-       auto begin = chrono::high_resolution_clock::now();
-       grid::Grid grid(60, 60);
-       grid.place_first_word(list[0], grid::Direction::HORIZONTAL);
-
-       for (size_t i = 1; i < list.size(); i++)
-       {
-        std::vector<grid::Location> buffer;
-        grid.get_valid_placements(list[i], buffer);
-        if (buffer.size() > 0)
-        {
-            grid.place_word_unchecked(list[i], buffer[0]);
-        }
-       }
-       auto end = chrono::high_resolution_clock::now();
-
-       grid.print_on_console();
-       auto dur = end - begin;
-       auto ms = std::chrono::duration_cast<std::chrono::microseconds>(dur).count();
-       std::cout << "Generating the grid took " << ms / 1000.0 << "ms" << std::endl;
-     */
     return 0;
 }
