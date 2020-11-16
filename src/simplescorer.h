@@ -9,13 +9,13 @@ namespace scoring {
 class SimpleScorer : public Scorer
 {
 private:
-    score const m_base_score;
-    score const m_placed_word_bonus;
-    score const m_placed_letter_bonus;
-    score const m_word_crossing_bonus;
-    score const m_missing_word_penalty;
-    score const m_used_row_penalty;
-    score const m_used_column_penalty;
+    score m_base_score;
+    score m_placed_word_bonus;
+    score m_placed_letter_bonus;
+    score m_word_crossing_bonus;
+    score m_missing_word_penalty;
+    score m_used_row_penalty;
+    score m_used_column_penalty;
 
 public:
     SimpleScorer(INIReader const &config);

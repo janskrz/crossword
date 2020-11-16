@@ -6,7 +6,7 @@
 
 typedef std::uint_fast16_t wid;
 
-typedef struct Word // cannot have const members due to use of std::shuffle
+typedef struct Word
 {
     wid id;
 

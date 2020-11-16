@@ -29,7 +29,7 @@ typedef struct Location
 class Grid
 {
 private:
-    char const EMPTY_CHAR = '-';
+    static char const EMPTY_CHAR;
 
     // size of the internal grid
     gidx m_internal_row_count;

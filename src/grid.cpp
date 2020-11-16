@@ -19,6 +19,8 @@
 
 using namespace grid;
 
+char const Grid::EMPTY_CHAR = '-';
+
 Grid::Grid(gidx max_row_count, gidx max_column_count) :
     m_internal_row_count(2 * max_row_count), m_internal_column_count(2 * max_column_count),
     m_crossing_count(0),

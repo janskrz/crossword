@@ -15,12 +15,12 @@ private:
     
     std::default_random_engine m_rng;
 
-    std::int_fast32_t const m_gen_count;
-    std::int_fast32_t const m_cw_max_width;
-    std::int_fast32_t const m_cw_max_height;
+    std::int_fast32_t m_gen_count;
+    std::int_fast32_t m_cw_max_width;
+    std::int_fast32_t m_cw_max_height;
 
     WordList word_list;
-    std::unique_ptr<scoring::Scorer> const m_grid_scorer;
+    std::unique_ptr<scoring::Scorer> m_grid_scorer;
 
     std::unique_ptr<grid::Grid> generate_single_grid();
 public:
