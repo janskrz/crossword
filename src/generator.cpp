@@ -66,7 +66,7 @@ std::unique_ptr<grid::Grid> Generator::generate_single_grid()
                 word_placed = true;
             }
         }
-        unused_words = unplaced_words; // TODO use pointers to avoid copies?
+        unused_words = std::move(unplaced_words);
 
         if (!word_placed)
             break;
