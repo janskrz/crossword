@@ -164,7 +164,7 @@ int main(__attribute__((unused)) int argc, char* argv[])
         return -1;
     }
 
-    Generator generator(cw_gen_count, cw_max_height, cw_max_width,
+    Generator generator(cw_gen_count, cw_max_width, cw_max_height,
                         std::move(wordprovider), std::move(scorer));
 
     std::unique_ptr<grid::Grid> grid = generator.generate();
